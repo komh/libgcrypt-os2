@@ -48,4 +48,5 @@ rndlinux.c \
 rndegd.c \
 rndunix.c \
 rndw32.c  \
-rndw32ce.c
+rndw32ce.c \
+rndos2.c

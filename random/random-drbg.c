@@ -652,6 +652,9 @@ drbg_get_entropy (drbg_state_t drbg, unsigned char *buffer,
 				       GCRY_VERY_STRONG_RANDOM);
     }
   while (rc >= 0 && read_cb_len < read_cb_size);
+#elif USE_RNDOS2
+  rc = _gcry_rndos2_gather_random (drbg_read_cb, 0, len,
+				     GCRY_VERY_STRONG_RANDOM);
 #else
   rc = -1;
 #endif
