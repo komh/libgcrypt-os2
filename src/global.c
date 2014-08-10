@@ -287,6 +287,9 @@ print_config ( int (*fnc)(FILE *fp, const char *format, ...), FILE *fp)
 #if USE_RNDW32
                 "w32:"
 #endif
+#if USE_RNDOS2
+                "os2:"
+#endif
        "\n");
   fnc (fp, "cpu-arch:"
 #if defined(HAVE_CPU_ARCH_X86)
