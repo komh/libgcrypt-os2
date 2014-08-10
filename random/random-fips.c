@@ -571,6 +571,10 @@ get_entropy (size_t nbytes)
                                        GCRY_VERY_STRONG_RANDOM);
     }
   while (rc >= 0 && entropy_collect_buffer_len < entropy_collect_buffer_size);
+#elif USE_RNDOS2
+  rc = _gcry_rndos2_gather_random (entropy_collect_cb, 0,
+                                   X931_AES_KEYLEN,
+                                   GCRY_VERY_STRONG_RANDOM);
 #else
   rc = -1;
 #endif
@@ -1005,7 +1009,7 @@ _gcry_rngfips_selftest (selftest_report_func_t report)
 {
   gcry_err_code_t ec;
 
-#if defined(USE_RNDLINUX) || defined(USE_RNDW32)
+#if defined(USE_RNDLINUX) || defined(USE_RNDW32) || defined(USE_RNDOS2)
   {
     char buffer[8];
 
@@ -1018,7 +1022,7 @@ _gcry_rngfips_selftest (selftest_report_func_t report)
 
   ec = selftest_kat (report);
 
-#else /*!(USE_RNDLINUX||USE_RNDW32)*/
+#else /*!(USE_RNDLINUX||USE_RNDW32||USE_RNDOS2)*/
   report ("random", 0, "setup", "no entropy gathering module");
   ec = GPG_ERR_SELFTEST_FAILED;
 #endif
