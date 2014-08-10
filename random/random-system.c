@@ -163,6 +163,8 @@ get_random (void *buffer, size_t length, int level)
       rc = _gcry_rndw32_gather_random (read_cb, 0, length, level);
     }
   while (rc >= 0 && read_cb_len < read_cb_size);
+#elif USE_RNDOS2
+  rc = _gcry_rndos2_gather_random (read_cb, 0, length, level);
 #else
   rc = -1;
 #endif
