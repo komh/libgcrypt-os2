@@ -147,13 +147,13 @@ _gcry_rndos2_gather_random( void ( *add )( const void *, size_t,
     {
         if( pfnDosPerfSysCall )
         {
-            buf = gcry_xcalloc( ulCpuCount, BUF_SIZE_CPUUTIL );
+            buf = xcalloc( ulCpuCount, BUF_SIZE_CPUUTIL );
 
             /* Query CPU utilization snapshot */
             if( !pfnDosPerfSysCall( 0x63, ( ULONG )buf, 0, 0 ))
                 ADD( buf, BUF_SIZE_CPUUTIL * ulCpuCount, origin, length );
 
-            gcry_free( buf );
+            xfree( buf );
         }
 
         if( hmodTcpIp32 )
@@ -164,13 +164,13 @@ _gcry_rndos2_gather_random( void ( *add )( const void *, size_t,
 
             if( s != -1 )
             {
-                buf = gcry_xmalloc( BUF_SIZE_IFMIB );
+                buf = xmalloc( BUF_SIZE_IFMIB );
 
                 if( !pfnos2_ioctl( s, SIOSTATIF, ( caddr_t )buf,
                                    BUF_SIZE_IFMIB ))
                     ADD( buf, BUF_SIZE_IFMIB, origin, length );
 
-                gcry_free( buf );
+                xfree( buf );
 
                 pfnsoclose( s );
             }
@@ -180,21 +180,21 @@ _gcry_rndos2_gather_random( void ( *add )( const void *, size_t,
         {
             ULONG ulAvail;
 
-            buf = gcry_xmalloc( BUF_SIZE_REQUESTER );
+            buf = xmalloc( BUF_SIZE_REQUESTER );
 
             if( !pfnNet32StatisticsGet2( NULL, "REQUESTER", 0, 0, 1, buf,
                                          BUF_SIZE_REQUESTER, &ulAvail ))
                 ADD( buf, BUF_SIZE_REQUESTER, origin, length );
 
-            gcry_free( buf );
+            xfree( buf );
 
-            buf = gcry_xmalloc( BUF_SIZE_SERVER );
+            buf = xmalloc( BUF_SIZE_SERVER );
 
             if( !pfnNet32StatisticsGet2( NULL, "SERVER", 0, 0, 1, buf,
                                          BUF_SIZE_SERVER, &ulAvail ))
                 ADD( buf, BUF_SIZE_SERVER, origin, length );
 
-            gcry_free( buf );
+            xfree( buf );
         }
 
         if( pfnDosQuerySysState )
@@ -203,7 +203,7 @@ _gcry_rndos2_gather_random( void ( *add )( const void *, size_t,
 
             /* Allocate additional memory because DosQuerySysState()
                sometimes seems to overwrite to a memory boundary. */
-            buf = gcry_xmalloc( bufSize + BUF_SIZE_SYS_STATE_MARGIN );
+            buf = xmalloc( bufSize + BUF_SIZE_SYS_STATE_MARGIN );
 
             do
             {
@@ -213,16 +213,15 @@ _gcry_rndos2_gather_random( void ( *add )( const void *, size_t,
                 if( rc == ERROR_BUFFER_OVERFLOW )
                 {
                     bufSize += BUF_SIZE_SYS_STATE_DELTA;
-                    gcry_free( buf );
-                    buf = gcry_xmalloc( bufSize +
-                                        BUF_SIZE_SYS_STATE_MARGIN );
+                    xfree( buf );
+                    buf = xmalloc( bufSize + BUF_SIZE_SYS_STATE_MARGIN );
                 }
             } while( rc == ERROR_BUFFER_OVERFLOW );
 
             if( !rc )
                 ADD( buf, bufSize, origin, length );
 
-            gcry_free( buf );
+            xfree( buf );
         }
 
 #define ADD_QSV( ord ) \
