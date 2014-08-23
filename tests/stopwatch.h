@@ -52,10 +52,7 @@ start_timer (void)
 #endif
   stopped_at = started_at;
 #else
-  struct tms tmp;
-
-  times (&tmp);
-  started_at = stopped_at = tmp.tms_utime;
+  started_at = stopped_at = clock ();
 #endif
 }
 
@@ -73,10 +70,7 @@ stop_timer (void)
                    &stopped_at.kernel_time, &stopped_at.user_time);
 #endif
 #else
-  struct tms tmp;
-
-  times (&tmp);
-  stopped_at = tmp.tms_utime;
+  stopped_at = clock ();
 #endif
 }
 
@@ -99,7 +93,7 @@ elapsed_time (void)
   snprintf (buf, sizeof buf, "%5.0fms", (double)t );
 #else
   snprintf (buf, sizeof buf, "%5.0fms",
-            (((double) (stopped_at - started_at))/CLOCKS_PER_SEC)*10000000);
+            (((double) (stopped_at - started_at))/CLOCKS_PER_SEC)*1000);
 #endif
   return buf;
 }
