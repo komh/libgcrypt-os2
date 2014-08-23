@@ -123,6 +123,54 @@ get_time_nsec_diff (struct nsec_time *start, struct nsec_time *end)
 
   return nsecs;
 }
+#elif defined(__OS2__)
+#define INCL_DOS
+#include <os2.h>
+
+struct nsec_time
+{
+  union
+  {
+    unsigned long long ullTime;
+    QWORD qwTime;
+  };
+};
+
+static void
+get_nsec_time (struct nsec_time *t)
+{
+  APIRET rc;
+
+  rc = DosTmrQueryTime (&t->qwTime);
+  assert (rc == 0);
+}
+
+static double
+get_time_nsec_diff (struct nsec_time *start, struct nsec_time *end)
+{
+  static double nsecs_per_count = 0.0;
+  double nsecs;
+
+  if (nsecs_per_count == 0.0)
+    {
+      ULONG ulFreq;
+      APIRET rc;
+
+      /* Get counts per second. */
+      rc = DosTmrQueryFreq (&ulFreq);
+      assert (rc == 0);
+
+      nsecs_per_count = 1.0 / ulFreq;
+      nsecs_per_count *= 1000000.0 * 1000.0;	/* sec => nsec */
+
+      assert (nsecs_per_count > 0.0);
+    }
+
+  nsecs = end->ullTime - start->ullTime;	/* counts */
+  nsecs *= nsecs_per_count;	/* counts * (nsecs / count) => nsecs */
+
+  return nsecs;
+}
 #elif defined(HAVE_CLOCK_GETTIME)
 struct nsec_time
 {
