@@ -1,0 +1,3 @@
+extproc sh
+
+autoreconf. -fvi
