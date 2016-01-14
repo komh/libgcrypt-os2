@@ -248,7 +248,7 @@ case "${host}" in
         have_os2_system=yes
         AC_DEFINE(HAVE_DRIVE_LETTERS)
         AC_DEFINE(HAVE_DOSISH_SYSTEM)
-        LDFLAGS="$LDFLAGS -no-undefined -Zbin-files"
+        LDFLAGS="$LDFLAGS -Zbin-files"
         ;;
 
     i?86-*-msdosdjgpp*)

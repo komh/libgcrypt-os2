@@ -97,7 +97,17 @@ else !HAVE_W32_SYSTEM
 
 gcrypt_res =
 gcrypt_res_ldflag =
+
+if HAVE_OS2_SYSTEM
+
+no_undefined = -no-undefined
+
+else !HAVE_OS2_SYSTEM
+
 no_undefined =
+
+endif !HAVE_OS2_SYSTEM
+
 export_symbols =
 extra_ltoptions =
 install-def-file:
