@@ -245,6 +245,9 @@
 /* Define to 1 if you have the `mmap' function. */
 #undef HAVE_MMAP
 
+/* Defined if we run on an OS/2 API based system */
+#undef HAVE_OS2_SYSTEM
+
 /* Defined if the GNU Pth is available */
 #undef HAVE_PTH
 
@@ -371,8 +374,7 @@
 /* List of available public key cipher algorithms */
 #undef LIBGCRYPT_PUBKEY_CIPHERS
 
-/* Define to the sub-directory in which libtool stores uninstalled libraries.
-   */
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
 
 /* Define to use the (obsolete) malloc guarding feature */
@@ -509,6 +511,9 @@
 
 /* Defined if the /dev/random RNG should be used. */
 #undef USE_RNDLINUX
+
+/* Defined if the OS/2 specific RNG should be used. */
+#undef USE_RNDOS2
 
 /* Defined if the default Unix RNG should be used. */
 #undef USE_RNDUNIX
