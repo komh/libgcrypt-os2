@@ -100,6 +100,14 @@ elapsed_time (unsigned int divisor)
     snprintf (buf, sizeof buf, "%5.1fms", (double)t );
   else
     snprintf (buf, sizeof buf, "%5.0fms", (double)t );
+#elif defined(__OS2__)
+  if (divisor != 1)
+    snprintf (buf, sizeof buf, "%5.1fms",
+              ((((double) (stopped_at - started_at)/(double)divisor)
+                /CLK_TCK)*1000));
+  else
+    snprintf (buf, sizeof buf, "%5.0fms",
+              (((double) (stopped_at - started_at)/CLK_TCK)*1000));
 #else
   if (divisor != 1)
     snprintf (buf, sizeof buf, "%5.1fms",
