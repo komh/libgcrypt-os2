@@ -24,6 +24,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <sys/time.h>
+
 #include <sys/ioctl.h>
 #include <net/if.h>
 
@@ -34,6 +36,9 @@
 #define ADD( buf, bufsize, origin, remain ) \
     do { \
         int n = ( bufsize ) < ( remain ) ? ( bufsize ) : ( remain ); \
+        int i; \
+        for( i = 0; i < n; i++ ) \
+            (( unsigned char *)( buf ))[ i ] += gethrtime(); \
         add( buf, n, origin ); \
         ( remain ) -= n; \
     } while( 0 )
